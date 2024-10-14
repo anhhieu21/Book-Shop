@@ -51,7 +51,7 @@ class DetailProduct extends StatelessWidget {
                 children: [
                   Text(
                     product.productName,
-                    style: TextStyle(color: Colors.white, fontSize: 30),
+                    style: TextStyle(color: Colors.white, fontSize: 26),
                   ),
                   SizedBox(
                     height: 15,
@@ -90,9 +90,18 @@ class DetailProduct extends StatelessWidget {
                   ),
                   Expanded(
                     child: SingleChildScrollView(
-                      child: Text(
-                        product.productDetails,
-                        style: TextStyle(fontSize: 17),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            product.productDetails,
+                            style: TextStyle(fontSize: 17),
+                          ),
+                          Text(
+                            'Category: ${product.category}',
+                            style: TextStyle(fontWeight: FontWeight.w600),
+                          ),
+                        ],
                       ),
                     ),
                   ),

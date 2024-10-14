@@ -51,12 +51,12 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<String> logout() async {
+  Future<bool> logout()async{
     try {
       await FirebaseAuth.instance.signOut();
-      return 'Success';
+      return true;
     } on FirebaseException {
-      return '';
+      return false;
     }
   }
 }

@@ -1,4 +1,6 @@
+import 'package:bookshop/providers/auth_provider.dart';
 import 'package:bookshop/providers/user_provider.dart';
+import 'package:bookshop/screens/auth_screens.dart';
 import 'package:bookshop/screens/order_screen.dart';
 import 'package:bookshop/widgets/drawerWidgets.dart';
 import 'package:flutter/material.dart';
@@ -119,6 +121,35 @@ class MyProfile extends StatelessWidget {
                           listTile(icon: Icons.add_chart, title: "About"),
                           listTile(
                               icon: Icons.exit_to_app_outlined,
+                              onTap: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (_) => AlertDialog(
+                                          title: Text("Logout"),
+                                          content: Text(
+                                              "Are you sure you want to log out?"),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: Text("Cancel"),
+                                            ),
+                                            TextButton(
+                                              onPressed: () {
+                                                context
+                                                    .read<AuthProvider>()
+                                                    .logout()
+                                                    .whenComplete(() {
+                                                  Get.offAll(
+                                                      () => AuthScreen());
+                                                });
+                                              },
+                                              child: Text("Yes"),
+                                            ),
+                                          ],
+                                        ));
+                              },
                               title: "Log Out"),
                         ],
                       ),

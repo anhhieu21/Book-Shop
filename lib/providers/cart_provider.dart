@@ -13,7 +13,7 @@ class CartProvider extends ChangeNotifier {
   double totalPrice = 0.0;
   Future<bool> addToCart(
     String productId,
-    int cartPrice,
+    double cartPrice,
     int cartQuantity,
     String totalPrice,
     String cartName,

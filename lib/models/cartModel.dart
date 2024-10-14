@@ -1,7 +1,7 @@
 class CartModel {
   late String cartId;
   String productId;
-  late int cartPrice;
+  late double cartPrice;
   late int cartQuantity;
   late double totalPrice;
   late String cartName;
@@ -18,7 +18,7 @@ class CartModel {
   });
   factory CartModel.fromJson(Map<String, dynamic> json) => CartModel(
         cartId: json["cartId"],
-        cartPrice: json["cartPrice"],
+        cartPrice: json["cartPrice"].toDouble(),
         cartQuantity: json["cartQuantity"],
         totalPrice: json["totalPrice"].toDouble(),
         productId: json["cartId"],
