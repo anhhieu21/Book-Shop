@@ -17,23 +17,33 @@ class OrderScreen extends StatelessWidget {
           child: ListView.builder(
             itemCount: provider.orders.length,
             itemBuilder: (context, index) {
+              final item = provider.orders[index];
               return Card(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Icon(Icons.location_on_rounded),
+                                Text('Address : '),
+                                Text(
+                                    '${item.address.name}\n${item.address.address}\n${item.address.provinceCity}\n${item.address.numberPhone}'),
+                              ],
+                            ),
                             Text('Amount: Rs.'
-                                '${provider.orders[index].products.length}'),
-                            Text(
-                                ' Total price: Rs. ${provider.orders[index].totalPrice}'),
+                                '${item.products.length}'),
+                            Text('Total price: Rs. ${item.totalPrice}'),
                           ],
                         ),
                       ),
-                      IconButton(
+                      TextButton.icon(
                         onPressed: () {
                           showModalBottomSheet(
                             context: context,
@@ -49,8 +59,7 @@ class OrderScreen extends StatelessWidget {
                                     child: GridView.count(
                                       crossAxisCount: 2,
                                       children: [
-                                        ...provider.orders[index].products
-                                            .map(
+                                        ...provider.orders[index].products.map(
                                           (e) => Card(
                                             child: Padding(
                                               padding:
@@ -75,6 +84,7 @@ class OrderScreen extends StatelessWidget {
                             ),
                           );
                         },
+                        label: Text('Details'),
                         icon: Icon(Icons.arrow_drop_down_circle_outlined),
                       ),
                     ],

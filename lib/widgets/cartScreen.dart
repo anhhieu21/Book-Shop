@@ -1,4 +1,5 @@
 import 'package:bookshop/providers/cart_provider.dart';
+import 'package:bookshop/screens/checkout_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -48,18 +49,12 @@ class _CartScreenState extends State<CartScreen> {
                 ),
                 Expanded(
                   child: FilledButton(
-                    onPressed: () async {
-                      final result = await Get.showOverlay(
-                        asyncFunction: provider.addOrder,
-                        loadingWidget:
-                            Center(child: const CircularProgressIndicator()),
-                      );
-
-                      if (result == true) {
-                        Get.snackbar(
-                            'Order Placed', 'Your order has been placed');
+                    onPressed: () {
+                      if (provider.cartList.isNotEmpty) {
+                        Get.to(() => CheckoutScreen());
                       } else {
-                        Get.snackbar('Order Failed', 'Please add item to cart');
+                        Get.snackbar(
+                            'Warning', 'Cart is empty, please add some items');
                       }
                     },
                     child: Text('Place Order'),

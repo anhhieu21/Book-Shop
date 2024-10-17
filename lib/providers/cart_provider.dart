@@ -51,7 +51,12 @@ class CartProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> addOrder() async {
+  Future<bool> addOrder({
+    required String name,
+    required String numberPhone,
+    required String address,
+    required String provinceCity,
+  }) async {
     if (cartList.isEmpty) {
       return false;
     }
@@ -62,6 +67,12 @@ class CartProvider extends ChangeNotifier {
           .add({
         'totalPrice': totalPrice,
         'products': cartList.map((e) => e.toJson()).toList(),
+        'address': {
+          'name': name,
+          'numberPhone': numberPhone,
+          'address': address,
+          'provinceCity': provinceCity,
+        },
       });
 
       final ids = cartList.map((e) => e.cartId).toList();
