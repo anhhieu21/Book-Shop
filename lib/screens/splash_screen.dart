@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 import 'auth_screens.dart';
-import 'main_screen.dart';
+import 'home_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -24,7 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
       if (isLogin) {
         await context.read<UserProvider>().getSingleUser();
         await context.read<CartProvider>().getCartData();
-        Get.offAll(() => const MainScreen());
+        Get.offAll(() => const HomeScreen());
       } else {
         Get.offAll(() => AuthScreen());
       }

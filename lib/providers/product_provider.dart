@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:bookshop/models/productModel.dart';
+import 'package:bookshop/models/product_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;

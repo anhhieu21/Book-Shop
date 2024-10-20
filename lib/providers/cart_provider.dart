@@ -1,5 +1,5 @@
-import 'package:bookshop/models/cartModel.dart';
-import 'package:bookshop/widgets/cartScreen.dart';
+import 'package:bookshop/models/cart_model.dart';
+import 'package:bookshop/widgets/cart_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

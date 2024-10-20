@@ -1,8 +1,8 @@
 import 'package:bookshop/providers/auth_provider.dart';
 import 'package:bookshop/providers/user_provider.dart';
 import 'package:bookshop/screens/auth_screens.dart';
-import 'package:bookshop/screens/main_screen.dart';
-import 'package:bookshop/widgets/myProfile.dart';
+import 'package:bookshop/screens/home_screen.dart';
+import 'package:bookshop/widgets/my_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -82,7 +82,7 @@ class DrawerWidgets extends StatelessWidget {
                   title: Text('Home'),
                   onTap: () {
                     Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (context) => MainScreen()));
+                        MaterialPageRoute(builder: (context) => HomeScreen()));
                   },
                 ),
                 ListTile(

@@ -1,4 +1,4 @@
-import 'package:bookshop/models/cartModel.dart';
+import 'package:bookshop/models/cart_model.dart';
 
 class OrderModel {
   late int amount;

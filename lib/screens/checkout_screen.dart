@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-import 'main_screen.dart';
+import 'home_screen.dart';
 
 class CheckoutScreen extends StatefulWidget {
   const CheckoutScreen({super.key});
@@ -183,7 +183,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                             Get.snackbar('Order Placed',
                                                 'Your order has been placed');
                                             Get.offAll(
-                                                () => const MainScreen());
+                                                () => const HomeScreen());
                                           } else {
                                             Get.snackbar('Order Failed',
                                                 'Please add item to cart');

@@ -2,7 +2,7 @@ import 'package:bookshop/providers/auth_provider.dart';
 import 'package:bookshop/providers/user_provider.dart';
 import 'package:bookshop/screens/auth_screens.dart';
 import 'package:bookshop/screens/order_screen.dart';
-import 'package:bookshop/widgets/drawerWidgets.dart';
+import 'package:bookshop/widgets/drawer_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';

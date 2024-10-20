@@ -1,21 +1,21 @@
-import 'package:bookshop/models/productModel.dart';
+import 'package:bookshop/models/product_model.dart';
 import 'package:bookshop/providers/cart_provider.dart';
 import 'package:bookshop/providers/product_provider.dart';
 import 'package:bookshop/screens/details_product.dart';
-import 'package:bookshop/widgets/drawerWidgets.dart';
-import 'package:bookshop/widgets/cartScreen.dart';
+import 'package:bookshop/widgets/drawer_widgets.dart';
+import 'package:bookshop/widgets/cart_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
   @override
-  State<MainScreen> createState() => _MainScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     context.read<ProductProvider>().getProducts();

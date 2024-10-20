@@ -1,6 +1,6 @@
-import 'package:bookshop/models/productModel.dart';
+import 'package:bookshop/models/product_model.dart';
 import 'package:bookshop/providers/cart_provider.dart';
-import 'package:bookshop/widgets/cartScreen.dart';
+import 'package:bookshop/widgets/cart_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';

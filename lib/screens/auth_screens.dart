@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-import 'main_screen.dart';
+import 'home_screen.dart';
 
 class AuthScreen extends StatelessWidget {
   final mailController = TextEditingController();
@@ -106,7 +106,7 @@ class AuthScreen extends StatelessWidget {
 
       if (success) {
         await context.read<UserProvider>().getSingleUser();
-        Get.offAll(() => const MainScreen());
+        Get.offAll(() => const HomeScreen());
       } else {
         Get.snackbar('Error', 'Invalid email or password');
       }
