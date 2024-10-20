@@ -2,7 +2,6 @@ import 'package:bookshop/models/product_model.dart';
 import 'package:bookshop/providers/cart_provider.dart';
 import 'package:bookshop/providers/product_provider.dart';
 import 'package:bookshop/screens/details_product.dart';
-import 'package:bookshop/widgets/drawer_widgets.dart';
 import 'package:bookshop/widgets/cart_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -26,13 +25,12 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Consumer<ProductProvider>(
       builder: (context, provider, child) {
-        final products = provider.productList;
+        final products = provider.productListPopular;
         return Scaffold(
-          drawer: DrawerWidgets(),
           appBar: AppBar(
             iconTheme: IconThemeData(color: Colors.black),
             title: Text(
-              'Home',
+              'Book Shop',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             actions: [
@@ -53,87 +51,77 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ],
           ),
-          body: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-            child: Column(children: [
-              Container(
-                height: 150,
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.circular(12),
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: AssetImage('assets/book.jpg'),
-                  ),
-                ),
-                child: Row(children: [
-                  Expanded(
-                    flex: 2,
-                    child: Column(
+          body: CustomScrollView(
+            slivers: [
+              SliverPadding(
+                padding: const EdgeInsets.all(16.0),
+                sliver: SliverAppBar(
+                  expandedHeight: 220,
+                  flexibleSpace: FlexibleSpaceBar(
+                    background: Stack(
+                      alignment: Alignment.center,
                       children: [
-                        Padding(
-                          padding:
-                              const EdgeInsets.only(right: 130, bottom: 10),
-                          child: SizedBox(
-                            height: 50,
-                            width: 100,
+                        Positioned.fill(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(12),
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: AssetImage('assets/book.jpg'),
+                              ),
+                            ),
                           ),
                         ),
-                        Text(
-                          '"There is no friend as loyal as a book"',
-                          style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.white,
-                              fontStyle: FontStyle.italic,
-                              fontWeight: FontWeight.bold),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            '"There is no friend as loyal as a book"',
+                            style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.white,
+                                fontStyle: FontStyle.italic,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ],
                     ),
                   ),
-                ]),
+                ),
               ),
-              Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Popular',
-                        style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.red),
-                      ),
-                      InkWell(
-                        onTap: () {},
-                        child: Text(
-                          'See All',
+              SliverPadding(
+                padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
+                sliver: SliverToBoxAdapter(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(minHeight: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Popular',
                           style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.red),
+                              fontSize: 20, fontWeight: FontWeight.bold),
                         ),
-                      ),
-                    ],
-                  )),
-              Expanded(
-                child: GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      mainAxisExtent: 300,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
+                        TextButton(onPressed: () {}, child: Text('View All'))
+                      ],
                     ),
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemCount: products.length,
-                    itemBuilder: (context, index) {
-                      return ItemBook(
-                        product: products[index],
-                      );
-                    }),
+                  ),
+                ),
               ),
-            ]),
+              SliverGrid.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisExtent: 300,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                  ),
+                  itemCount: products.length,
+                  itemBuilder: (context, index) {
+                    return ItemBook(
+                      product: products[index],
+                    );
+                  }),
+            ],
           ),
         );
       },
@@ -155,24 +143,11 @@ class ItemBook extends StatelessWidget {
         Get.to(() => DetailProduct(product));
       },
       child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          width: double.infinity,
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(
-              product.productName,
-              style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black),
-            ),
-            Text(
-                "Rs. "
-                "${product.productPrice}", //price
-                style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.red)),
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        width: double.infinity,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
             Expanded(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(12),
@@ -185,8 +160,21 @@ class ItemBook extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 10),
-          ])),
+            Text(
+              product.productName,
+              maxLines: 1,
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black),
+            ),
+            Text("Price: ${product.productPrice}\$",
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, color: Colors.red)),
+            SizedBox(height: 16),
+          ],
+        ),
+      ),
     );
   }
 }

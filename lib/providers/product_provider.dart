@@ -7,10 +7,12 @@ import 'package:flutter/services.dart' show rootBundle;
 class ProductProvider extends ChangeNotifier {
   CollectionReference dbPosts = FirebaseFirestore.instance.collection('books');
   List<ProductModel> productList = [];
+  List<ProductModel> productListPopular = [];
 
   Future getProducts() async {
     final data = await dbPosts.get();
     productList = _getFromSnap(data);
+    productListPopular = productList.sublist(0, 10);
     notifyListeners();
     return productList;
   }

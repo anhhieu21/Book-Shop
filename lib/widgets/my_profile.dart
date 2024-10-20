@@ -2,7 +2,6 @@ import 'package:bookshop/providers/auth_provider.dart';
 import 'package:bookshop/providers/user_provider.dart';
 import 'package:bookshop/screens/auth_screens.dart';
 import 'package:bookshop/screens/order_screen.dart';
-import 'package:bookshop/widgets/drawer_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -39,7 +38,6 @@ class MyProfile extends StatelessWidget {
               "My Profile",
             ),
           ),
-          drawer: DrawerWidgets(),
           body: Stack(
             children: [
               Column(
@@ -62,59 +60,30 @@ class MyProfile extends StatelessWidget {
                       ),
                       child: ListView(
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Container(
-                                width: 250,
-                                height: 80,
-                                padding: EdgeInsets.only(left: 20),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Column(
-                                          children: [
-                                            Text(
-                                              provider.user!.userName,
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 18),
-                                            ),
-                                            Text(
-                                              provider.user!.email,
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 15),
-                                            ),
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                    IconButton.filled(
-                                        onPressed: () {
-                                          Get.snackbar('Inprogress',
-                                              'Feature Coming Soon');
-                                        },
-                                        icon: Icon(Icons.edit))
-                                  ],
+                          Container(
+                            padding: EdgeInsets.fromLTRB(16, 32, 16, 16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  provider.user!.userName,
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600),
                                 ),
-                              ),
-                            ],
+                                Text(
+                                  provider.user!.email,
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 15),
+                                ),
+                              ],
+                            ),
                           ),
                           listTile(
                               onTap: () => Get.to(() => OrderScreen()),
-                              icon: Icons.shop_outlined,
+                              icon: Icons.shopping_bag_outlined,
                               title: "My Orders"),
-                          listTile(
-                              icon: Icons.file_copy_outlined,
-                              title: "Terms & Conditions"),
                           listTile(
                               icon: Icons.policy_outlined,
                               title: "Privacy Policy"),
@@ -164,8 +133,7 @@ class MyProfile extends StatelessWidget {
                   backgroundColor: Colors.grey,
                   child: CircleAvatar(
                       backgroundImage: AssetImage(
-                        // userData.userImage ??
-                        "assets/book1.jpg",
+                        "assets/male-avt.jpg",
                       ),
                       radius: 45,
                       backgroundColor: Colors.grey),

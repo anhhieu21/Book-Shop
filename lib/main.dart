@@ -36,12 +36,13 @@ class Home extends StatelessWidget {
         home: SplashScreen(),
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-            useMaterial3: true,
-            inputDecorationTheme: InputDecorationTheme(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            )),
+          useMaterial3: true,
+          inputDecorationTheme: InputDecorationTheme(
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+        ),
       ),
     );
   }
