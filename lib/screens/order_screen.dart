@@ -37,9 +37,9 @@ class OrderScreen extends StatelessWidget {
                                     '${item.address.name}\n${item.address.address}\n${item.address.provinceCity}\n${item.address.numberPhone}'),
                               ],
                             ),
-                            Text('Amount: Rs.'
+                            Text('Amount: \$'
                                 '${item.products.length}'),
-                            Text('Total price: Rs. ${item.totalPrice}'),
+                            Text('Total price: \$ ${item.totalPrice}'),
                           ],
                         ),
                       ),
@@ -70,7 +70,7 @@ class OrderScreen extends StatelessWidget {
                                                       child: Image.network(
                                                           e.cartImage)),
                                                   Text(e.cartName),
-                                                  Text('Rs. ${e.cartPrice}'),
+                                                  Text('\$ ${e.cartPrice}'),
                                                 ],
                                               ),
                                             ),

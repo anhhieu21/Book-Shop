@@ -1,8 +1,8 @@
-import 'package:bookshop/models/product_model.dart';
+import 'package:bookshop/models/book.dart';
 import 'package:bookshop/providers/cart_provider.dart';
 import 'package:bookshop/providers/product_provider.dart';
 import 'package:bookshop/screens/details_product.dart';
-import 'package:bookshop/widgets/cart_screen.dart';
+import 'package:bookshop/screens/student/book_mg_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -30,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
           appBar: AppBar(
             iconTheme: IconThemeData(color: Colors.black),
             title: Text(
-              'Book Shop',
+              'Book Library',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             actions: [
@@ -38,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 17),
                 child: IconButton(
                   onPressed: () {
-                    Get.to(() => CartScreen());
+                    Get.to(() => BorrowedBookScreen());
                   },
                   icon: Consumer<CartProvider>(
                       builder: (context, provider, child) {
@@ -98,11 +98,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Popular',
+                          'Sách phổ biến',
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold),
                         ),
-                        TextButton(onPressed: () {}, child: Text('View All'))
+                        TextButton(onPressed: () {}, child: Text('Xem thêm')),
                       ],
                     ),
                   ),
@@ -130,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class ItemBook extends StatelessWidget {
-  final ProductModel product;
+  final Book product;
   const ItemBook({
     super.key,
     required this.product,
@@ -152,7 +152,7 @@ class ItemBook extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: Image.network(
-                  product.productImage,
+                  product.image,
                   fit: BoxFit.cover,
                   width: double.infinity,
                   errorBuilder: (context, error, stackTrace) =>
@@ -161,7 +161,7 @@ class ItemBook extends StatelessWidget {
               ),
             ),
             Text(
-              product.productName,
+              product.name,
               maxLines: 1,
               style: TextStyle(
                   fontSize: 16,

@@ -1,19 +1,19 @@
-import 'package:bookshop/widgets/cart_screen.dart';
-import 'package:bookshop/widgets/my_profile.dart';
+import 'package:bookshop/screens/student/book_mg_screen.dart';
+import 'package:bookshop/screens/my_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/cart_provider.dart';
+import '../../providers/cart_provider.dart';
 import 'home_screen.dart';
 
-class MainScreens extends StatefulWidget {
-  const MainScreens({super.key});
+class AdminMainScreens extends StatefulWidget {
+  const AdminMainScreens({super.key});
 
   @override
-  State<MainScreens> createState() => _MainScreensState();
+  State<AdminMainScreens> createState() => _AdminMainScreensState();
 }
 
-class _MainScreensState extends State<MainScreens> {
+class _AdminMainScreensState extends State<AdminMainScreens> {
   List<Widget> _screen = [];
   int _currentIndex = 0;
   @override
@@ -21,8 +21,8 @@ class _MainScreensState extends State<MainScreens> {
     super.initState();
     super.initState();
     _screen = [
-      HomeScreen(),
-      CartScreen(),
+      AdminHomeScreen(),
+      BorrowedBookScreen(),
       MyProfile(),
     ];
   }
@@ -38,16 +38,17 @@ class _MainScreensState extends State<MainScreens> {
         selectedIndex: _currentIndex,
         onDestinationSelected: (value) => setState(() => _currentIndex = value),
         destinations: [
-          NavigationDestination(icon: Icon(Icons.book_rounded), label: "Home"),
+          NavigationDestination(
+              icon: Icon(Icons.book_rounded), label: "Trang chủ"),
           NavigationDestination(
               icon: Consumer<CartProvider>(builder: (context, provider, child) {
                 return Badge.count(
                   count: provider.cartList.length,
-                  child: Icon(Icons.shopping_bag),
+                  child: Icon(Icons.bookmark),
                 );
               }),
-              label: "Cart"),
-          NavigationDestination(icon: Icon(Icons.person), label: "Account"),
+              label: "Đã mượn"),
+          NavigationDestination(icon: Icon(Icons.person), label: "Tài khoản"),
         ],
       ),
     );

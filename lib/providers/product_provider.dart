@@ -1,51 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:bookshop/models/product_model.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:bookshop/models/book.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
 
 class ProductProvider extends ChangeNotifier {
-  CollectionReference dbPosts = FirebaseFirestore.instance.collection('books');
-  List<ProductModel> productList = [];
-  List<ProductModel> productListPopular = [];
+  List<Book> productList = [];
+  List<Book> productListPopular = [];
 
   Future getProducts() async {
-    final data = await dbPosts.get();
-    productList = _getFromSnap(data);
+    // Load products from local JSON file or other source
+    String jsonString = await rootBundle.loadString('assets/books.json');
+    List<dynamic> books = json.decode(jsonString);
+    productList = books.map((book) => Book.fromJson(book)).toList();
     productListPopular = productList.sublist(0, 10);
     notifyListeners();
     return productList;
   }
 
-  Future<ProductModel> getProductFromId(String id) async {
-    final data = await dbPosts.doc(id).get();
-    return _getProductFromSnap(data);
-  }
-
-  ProductModel _getProductFromSnap(DocumentSnapshot documentSnapshot) {
-    final data = documentSnapshot.data() as Map<String, dynamic>;
-    return ProductModel(
-      productId: documentSnapshot.id,
-      productName: data['productName'],
-      productPrice: data['productPrice'],
-      productDetails: data['productDetails'],
-      productImage: data['productImage'],
-      category: data['categories'] == null ? "" : data['categories'][0],
-    );
-  }
-
-  List<ProductModel> _getFromSnap(QuerySnapshot querySnapshot) {
-    return querySnapshot.docs.map((e) {
-      final data = e.data() as Map<String, dynamic>;
-      return ProductModel(
-        productId: e.id,
-        productImage: data['productImage'] ?? '',
-        productName: data['productName'] ?? '',
-        productPrice: data['productPrice'].toDouble() ?? 0.0,
-        productDetails: data['productDetails'] ?? '',
-        category: data['categories'] == null ? "" : data['categories'][0],
-      );
-    }).toList();
+  Future<Book> getProductFromId(String id) async {
+    // Find product by id from the local list
+    return productList.firstWhere((product) => product.id == id);
   }
 
   insertList() async {
@@ -53,19 +27,15 @@ class ProductProvider extends ChangeNotifier {
       String jsonString = await rootBundle.loadString('assets/books.json');
       List<dynamic> books = json.decode(jsonString);
 
-      // Lấy tham chiếu đến collection 'books' trên Firestore
-      CollectionReference booksCollection =
-          FirebaseFirestore.instance.collection('books');
-
-      // Tải từng cuốn sách lên Firestore
+      // Process books as needed
       for (var book in books) {
-        final id = booksCollection.doc().id;
+        final id = UniqueKey().toString();
         book['productId'] = id;
-        await booksCollection.doc(id).set(book);
+        productList.add(Book.fromJson(book));
       }
-      print('Tải sách lên Firebase thành công!');
+      print('Books loaded successfully!');
     } catch (e) {
-      print('Lỗi khi tải sách lên Firebase: $e');
+      print('Error loading books: $e');
     }
   }
 }

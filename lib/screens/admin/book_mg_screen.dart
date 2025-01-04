@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-class CartScreen extends StatefulWidget {
-  const CartScreen({super.key});
+class BorrowedBookScreen extends StatefulWidget {
+  const BorrowedBookScreen({super.key});
 
   @override
-  State<CartScreen> createState() => _CartScreenState();
+  State<BorrowedBookScreen> createState() => _BorrowedBookScreenState();
 }
 
-class _CartScreenState extends State<CartScreen> {
+class _BorrowedBookScreenState extends State<BorrowedBookScreen> {
   late int count = 0;
 
   late List<String> itemsToOrder = [];
@@ -43,7 +43,7 @@ class _CartScreenState extends State<CartScreen> {
                       Text(
                         'Your Total Order is:',
                       ),
-                      Text('Rs.' ' ${provider.totalPrice}\$'),
+                      Text('\$${provider.totalPrice}'),
                     ],
                   ),
                 ),

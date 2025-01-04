@@ -1,10 +1,11 @@
 import 'package:bookshop/providers/cart_provider.dart';
 import 'package:bookshop/providers/user_provider.dart';
+import 'package:bookshop/screens/student/main_screens.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-import 'home_screen.dart';
+import 'student/home_screen.dart';
 
 class CheckoutScreen extends StatefulWidget {
   const CheckoutScreen({super.key});
@@ -26,7 +27,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   @override
   void initState() {
-    nameController.text = context.read<UserProvider>().user?.userName ?? '';
+    nameController.text = context.read<UserProvider>().user?.name ?? '';
     super.initState();
   }
 
@@ -183,7 +184,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                             Get.snackbar('Order Placed',
                                                 'Your order has been placed');
                                             Get.offAll(
-                                                () => const HomeScreen());
+                                                () => const MainScreens());
                                           } else {
                                             Get.snackbar('Order Failed',
                                                 'Please add item to cart');

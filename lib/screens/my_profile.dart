@@ -1,6 +1,6 @@
 import 'package:bookshop/providers/auth_provider.dart';
 import 'package:bookshop/providers/user_provider.dart';
-import 'package:bookshop/screens/auth_screens.dart';
+import 'package:bookshop/screens/signin_screens.dart';
 import 'package:bookshop/screens/order_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -28,7 +28,7 @@ class MyProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<UserProvider>(
+    return Consumer<AuthProvider>(
       builder: (context, provider, child) {
         return Scaffold(
           backgroundColor: Colors.orange,
@@ -66,7 +66,7 @@ class MyProfile extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  provider.user!.userName,
+                                  provider.user!.name,
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 18,
@@ -111,7 +111,7 @@ class MyProfile extends StatelessWidget {
                                                     .logout()
                                                     .whenComplete(() {
                                                   Get.offAll(
-                                                      () => AuthScreen());
+                                                      () => SignInScreen());
                                                 });
                                               },
                                               child: Text("Yes"),

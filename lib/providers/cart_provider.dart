@@ -1,15 +1,12 @@
 import 'package:bookshop/models/cart_model.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CartProvider extends ChangeNotifier {
-  CollectionReference dbUser = FirebaseFirestore.instance.collection('users');
-
   List<CartModel> cartList = []; // List<CartModel>
 
   double totalPrice = 0.0;
+
   Future<bool> addToCart(
     String productId,
     double cartPrice,
@@ -19,35 +16,31 @@ class CartProvider extends ChangeNotifier {
     String cartImage,
   ) async {
     try {
-      final ref =
-          dbUser.doc(FirebaseAuth.instance.currentUser!.uid).collection('cart');
-
-      final doc = await ref.doc(productId).get();
-      if (doc.exists) {
-        final data = CartModel.fromJson(doc.data() as Map<String, dynamic>);
-        await ref.doc(productId).update({
-          'cartQuantity': FieldValue.increment(1),
-          'totalPrice': data.totalPrice + cartPrice,
-        });
+      final existingItemIndex = cartList.indexWhere((item) => item.cartId == productId);
+      if (existingItemIndex != -1) {
+        final existingItem = cartList[existingItemIndex];
+        existingItem.cartQuantity += 1;
+        existingItem.totalPrice += cartPrice;
       } else {
-        await ref.doc(productId).set({
-          'cartId': productId,
-          'cartPrice': cartPrice,
-          'cartQuantity': cartQuantity,
-          'totalPrice': double.tryParse(totalPrice),
-          'cartName': cartName,
-          'cartImage': cartImage,
-        });
+        cartList.add(CartModel(
+          cartId: productId,
+          cartPrice: cartPrice,
+          cartQuantity: cartQuantity,
+          totalPrice: double.tryParse(totalPrice) ?? 0.0,
+          productId: productId,
+          cartName: cartName,
+          cartImage: cartImage,
+        ));
       }
-      getCartData();
+      calculateTotalPrice();
       Get.snackbar('Added to cart', 'Item added to cart',
           icon: Icon(
             Icons.check_circle,
             color: Colors.green,
           ));
-
+      notifyListeners();
       return true;
-    } on FirebaseException catch (e) {
+    } catch (e) {
       print(e);
       return false;
     }
@@ -63,86 +56,45 @@ class CartProvider extends ChangeNotifier {
       return false;
     }
     try {
-      await dbUser
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .collection('orders')
-          .add({
-        'totalPrice': totalPrice,
-        'products': cartList.map((e) => e.toJson()).toList(),
-        'address': {
-          'name': name,
-          'numberPhone': numberPhone,
-          'address': address,
-          'provinceCity': provinceCity,
-        },
-      });
+      // Add order logic here (e.g., save to local storage or another service)
 
-      final ids = cartList.map((e) => e.cartId).toList();
-      for (var id in ids) {
-        await dbUser
-            .doc(FirebaseAuth.instance.currentUser!.uid)
-            .collection('cart')
-            .doc(id)
-            .delete();
-      }
       cartList.clear();
       totalPrice = 0.0;
       notifyListeners();
       return true;
-    } on FirebaseException catch (e) {
+    } catch (e) {
       print(e);
       return false;
     }
   }
 
   void addSingleCart(CartModel cartItem) {
-    cartItem.cartQuantity = cartItem.cartQuantity + 1;
-    cartItem.totalPrice = cartItem.cartPrice * (cartItem.cartQuantity + 1);
+    cartItem.cartQuantity += 1;
+    cartItem.totalPrice = cartItem.cartPrice * cartItem.cartQuantity;
+    calculateTotalPrice();
+    notifyListeners();
   }
 
   Future<bool> removeCartItem({required String cartId}) async {
     try {
-      final ref = dbUser
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .collection('cart')
-          .doc(cartId);
-      await ref.delete();
-
       cartList.removeWhere((element) => element.cartId == cartId);
-
-      totalPrice = cartList.fold(0, (sum, item) => sum + item.totalPrice);
+      calculateTotalPrice();
       Get.snackbar('Removed from cart', 'Item removed from cart');
       notifyListeners();
       return true;
-    } on FirebaseException catch (err) {
+    } catch (err) {
       print(err);
       return false;
     }
   }
 
-  Future<List<CartModel>> getCartData() async {
-    final data = await dbUser
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .collection('cart')
-        .get();
-    cartList = _getFromSnap(data);
+  void calculateTotalPrice() {
     totalPrice = cartList.fold(0, (sum, item) => sum + item.totalPrice);
-    notifyListeners();
-    return cartList;
   }
 
-  List<CartModel> _getFromSnap(QuerySnapshot querySnapshot) {
-    return querySnapshot.docs.map((e) {
-      final data = e.data() as Map<String, dynamic>;
-      return CartModel(
-        cartId: e.id,
-        cartPrice: data['cartPrice'],
-        cartQuantity: data['cartQuantity'],
-        totalPrice: data['cartPrice'].toDouble() * data['cartQuantity'],
-        productId: data['productId'] ?? 'temporary',
-        cartName: data["cartName"] ?? "",
-        cartImage: data["cartImage"] ?? "",
-      );
-    }).toList();
+  Future<List<CartModel>> getCartData() async {
+    // Fetch cart data logic here (e.g., from local storage or another service)
+    notifyListeners();
+    return cartList;
   }
 }
