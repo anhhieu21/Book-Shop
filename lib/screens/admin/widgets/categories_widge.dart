@@ -1,16 +1,8 @@
+import 'package:bookshop/models/book.dart';
 import 'package:flutter/material.dart';
 
 class CategoriesWidget extends StatelessWidget {
-  final List<String> categories = [
-    'Science Fiction',
-    'Romance',
-    'Mystery',
-    'Fantasy',
-    'Biography',
-    'History'
-  ];
-
-  CategoriesWidget({super.key});
+  const CategoriesWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,14 +14,15 @@ class CategoriesWidget extends StatelessWidget {
       mainAxisSpacing: 8,
       childAspectRatio: 1.5,
       children: List.generate(
-        categories.length,
+        CategoryEnum.values.length,
         (index) {
           return SizedBox(
             child: Card(
               elevation: 1.0,
+              color: Color.fromRGBO(204, 211, 202, 1),
               child: Center(
                 child: Text(
-                  categories[index],
+                  CategoryEnum.values[index].title,
                   textAlign: TextAlign.center,
                 ),
               ),

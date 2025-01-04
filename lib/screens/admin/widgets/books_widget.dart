@@ -5,6 +5,14 @@ class BooksWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return SliverPadding(
+      padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
+      sliver: SliverToBoxAdapter(
+        child: Text(
+          'Sách hiện có',
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+      ),
+    );
   }
 }

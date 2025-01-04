@@ -1,3 +1,7 @@
+import 'dart:ui';
+
+import 'package:flutter/material.dart';
+
 class Book {
   late String? id;
   late String name;
@@ -24,4 +28,16 @@ class Book {
       category: json['categories'] == null ? "" : json['categories'][0],
     );
   }
+}
+
+enum CategoryEnum {
+  khoaHocVienTuong('Khoa Học Viễn Tưởng'),
+  langMan('Lãng Mạn'),
+  biAn('Bí Ẩn'),
+  lichSu('Lịch Sử'),
+  tieuSu('Tiểu Sử'),
+  giaTuong('Giả Tưởng');
+
+  final String title;
+  const CategoryEnum(this.title);
 }

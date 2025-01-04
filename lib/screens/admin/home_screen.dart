@@ -1,10 +1,11 @@
 import 'package:bookshop/models/book.dart';
-import 'package:bookshop/providers/cart_provider.dart';
 import 'package:bookshop/providers/product_provider.dart';
+import 'package:bookshop/screens/admin/add_book_screen.dart';
+import 'package:bookshop/screens/admin/widgets/books_widget.dart';
 import 'package:bookshop/screens/details_product.dart';
-import 'package:bookshop/screens/student/book_mg_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:provider/provider.dart';
 
 import 'widgets/categories_widge.dart';
@@ -36,6 +37,12 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              Get.to(() => AddBookScreen());
+            },
+            child: Icon(Icons.add),
+          ),
           body: CustomScrollView(
             slivers: [
               SliverPadding(
@@ -57,6 +64,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                   ),
                 ),
               ),
+              BooksWidget(),
               SliverGrid.builder(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
