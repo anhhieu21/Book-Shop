@@ -1,7 +1,4 @@
-import 'dart:math';
-
 import 'package:bookshop/models/user_model.dart';
-import 'package:bookshop/screens/admin/home_screen.dart';
 import 'package:bookshop/screens/admin/main_screens.dart';
 import 'package:bookshop/screens/signin_screens.dart';
 import 'package:bookshop/screens/student/main_screens.dart';
@@ -19,7 +16,7 @@ class AuthProvider extends ChangeNotifier {
   User? user;
 
   Future<bool> checkAuthState() async {
-    try {
+    try { 
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString('accessToken');
       if (token == null) {

@@ -1,7 +1,7 @@
 import 'package:bookshop/models/book.dart';
-import 'package:bookshop/providers/cart_provider.dart';
-import 'package:bookshop/providers/product_provider.dart';
-import 'package:bookshop/screens/details_product.dart';
+import 'package:bookshop/providers/borrowed_provider.dart';
+import 'package:bookshop/providers/book_provider.dart';
+import 'package:bookshop/screens/details_book.dart';
 import 'package:bookshop/screens/student/book_mg_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,15 +17,15 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
-    context.read<ProductProvider>().getProducts();
+    context.read<BookProvider>().getBooks();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ProductProvider>(
+    return Consumer<BookProvider>(
       builder: (context, provider, child) {
-        final products = provider.productListPopular;
+        final products = provider.bookList;
         return Scaffold(
           appBar: AppBar(
             iconTheme: IconThemeData(color: Colors.black),
@@ -40,13 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   onPressed: () {
                     Get.to(() => BorrowedBookScreen());
                   },
-                  icon: Consumer<CartProvider>(
-                      builder: (context, provider, child) {
-                    return Badge.count(
-                      count: provider.cartList.length,
-                      child: Icon(Icons.shopping_bag_outlined),
-                    );
-                  }),
+                  icon: Icon(Icons.search),
                 ),
               ),
             ],
@@ -140,7 +134,7 @@ class ItemBook extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => DetailProduct(product));
+        Get.to(() => DetailBook(product));
       },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),

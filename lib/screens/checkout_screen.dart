@@ -1,4 +1,4 @@
-import 'package:bookshop/providers/cart_provider.dart';
+import 'package:bookshop/providers/borrowed_provider.dart';
 import 'package:bookshop/providers/user_provider.dart';
 import 'package:bookshop/screens/student/main_screens.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +33,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<CartProvider>(builder: (context, provider, child) {
+    return Consumer<BorrowedBookProvider>(builder: (context, provider, child) {
       return Scaffold(
         appBar: AppBar(
           title: Text('Checkout'),

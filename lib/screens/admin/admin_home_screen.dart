@@ -1,8 +1,8 @@
 import 'package:bookshop/models/book.dart';
-import 'package:bookshop/providers/product_provider.dart';
+import 'package:bookshop/providers/book_provider.dart';
 import 'package:bookshop/screens/admin/add_book_screen.dart';
 import 'package:bookshop/screens/admin/widgets/books_widget.dart';
-import 'package:bookshop/screens/details_product.dart';
+import 'package:bookshop/screens/details_book.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
@@ -20,15 +20,15 @@ class AdminHomeScreen extends StatefulWidget {
 class _AdminHomeScreenState extends State<AdminHomeScreen> {
   @override
   void initState() {
-    context.read<ProductProvider>().getProducts();
+    context.read<BookProvider>().getBooks();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ProductProvider>(
+    return Consumer<BookProvider>(
       builder: (context, provider, child) {
-        final products = provider.productListPopular;
+        final products = provider.bookList;
         return Scaffold(
           appBar: AppBar(
             iconTheme: IconThemeData(color: Colors.black),
@@ -97,7 +97,7 @@ class ItemBook extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => DetailProduct(product));
+        Get.to(() => DetailBook(product));
       },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -125,9 +125,9 @@ class ItemBook extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                   color: Colors.black),
             ),
-            Text("Price: ${product.productPrice}\$",
+            Text("Author: ${product.author}",
                 style:
-                    TextStyle(fontWeight: FontWeight.bold, color: Colors.red)),
+                    TextStyle(fontWeight: FontWeight.bold, color: Colors.blue)),
             SizedBox(height: 16),
           ],
         ),

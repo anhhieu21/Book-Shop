@@ -2,7 +2,7 @@ import 'package:bookshop/models/cart_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class CartProvider extends ChangeNotifier {
+class BorrowedBookProvider extends ChangeNotifier {
   List<CartModel> cartList = []; // List<CartModel>
 
   double totalPrice = 0.0;
@@ -16,7 +16,8 @@ class CartProvider extends ChangeNotifier {
     String cartImage,
   ) async {
     try {
-      final existingItemIndex = cartList.indexWhere((item) => item.cartId == productId);
+      final existingItemIndex =
+          cartList.indexWhere((item) => item.cartId == productId);
       if (existingItemIndex != -1) {
         final existingItem = cartList[existingItemIndex];
         existingItem.cartQuantity += 1;

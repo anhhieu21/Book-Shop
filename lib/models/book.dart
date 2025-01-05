@@ -1,6 +1,4 @@
-import 'dart:ui';
-
-import 'package:flutter/material.dart';
+import 'package:bookshop/service/service_url.dart';
 
 class Book {
   late String? id;
@@ -9,24 +7,37 @@ class Book {
   late double productPrice;
   late String author;
   String? category;
+  String yearPubish;
   Book({
     required this.id,
     required this.name,
     required this.image,
-    required this.productPrice,
+    this.productPrice = 0,
     required this.author,
     this.category,
+    required this.yearPubish,
   });
 
   factory Book.fromJson(Map<String, dynamic> json) {
     return Book(
       id: json['id'],
       name: json['name'],
-      image: json['image'],
-      productPrice: json['productPrice'],
+      image: json['image'] != null
+          ? '${ServiceUrl.baseUrl}/static/images/${json['image']}'
+          : 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8Ym9va3xlbnwwfDF8MHx8fDA%3D',
       author: json['author'],
-      category: json['categories'] == null ? "" : json['categories'][0],
+      category: json['category'],
+      yearPubish: json['yearPubish'],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'yearPubish': yearPubish,
+      'author': author,
+      'category': category,
+    };
   }
 }
 
@@ -40,4 +51,6 @@ enum CategoryEnum {
 
   final String title;
   const CategoryEnum(this.title);
+
+  getTitle(String cate) {}
 }

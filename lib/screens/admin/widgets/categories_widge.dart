@@ -17,9 +17,7 @@ class CategoriesWidget extends StatelessWidget {
         CategoryEnum.values.length,
         (index) {
           return SizedBox(
-            child: Card(
-              elevation: 1.0,
-              color: Color.fromRGBO(204, 211, 202, 1),
+            child: Card.outlined(
               child: Center(
                 child: Text(
                   CategoryEnum.values[index].title,

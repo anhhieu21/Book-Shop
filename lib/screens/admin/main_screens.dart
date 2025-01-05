@@ -1,10 +1,10 @@
-import 'package:bookshop/screens/student/book_mg_screen.dart';
+import 'package:bookshop/screens/admin/book_lent_screen.dart';
 import 'package:bookshop/screens/my_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/cart_provider.dart';
-import 'home_screen.dart';
+import '../../providers/borrowed_provider.dart';
+import 'admin_home_screen.dart';
 
 class AdminMainScreens extends StatefulWidget {
   const AdminMainScreens({super.key});
@@ -22,7 +22,7 @@ class _AdminMainScreensState extends State<AdminMainScreens> {
     super.initState();
     _screen = [
       AdminHomeScreen(),
-      BorrowedBookScreen(),
+      BookLentScreen(),
       MyProfile(),
     ];
   }
@@ -41,13 +41,14 @@ class _AdminMainScreensState extends State<AdminMainScreens> {
           NavigationDestination(
               icon: Icon(Icons.book_rounded), label: "Trang chủ"),
           NavigationDestination(
-              icon: Consumer<CartProvider>(builder: (context, provider, child) {
+              icon: Consumer<BorrowedBookProvider>(
+                  builder: (context, provider, child) {
                 return Badge.count(
                   count: provider.cartList.length,
-                  child: Icon(Icons.bookmark),
+                  child: Icon(Icons.library_books_rounded),
                 );
               }),
-              label: "Đã mượn"),
+              label: "Đã cho mượn"),
           NavigationDestination(icon: Icon(Icons.person), label: "Tài khoản"),
         ],
       ),

@@ -1,17 +1,17 @@
-import 'package:bookshop/providers/cart_provider.dart';
+import 'package:bookshop/providers/borrowed_provider.dart';
 import 'package:bookshop/screens/checkout_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-class BorrowedBookScreen extends StatefulWidget {
-  const BorrowedBookScreen({super.key});
+class BookLentScreen extends StatefulWidget {
+  const BookLentScreen({super.key});
 
   @override
-  State<BorrowedBookScreen> createState() => _BorrowedBookScreenState();
+  State<BookLentScreen> createState() => _BookLentScreenState();
 }
 
-class _BorrowedBookScreenState extends State<BorrowedBookScreen> {
+class _BookLentScreenState extends State<BookLentScreen> {
   late int count = 0;
 
   late List<String> itemsToOrder = [];
@@ -25,43 +25,11 @@ class _BorrowedBookScreenState extends State<BorrowedBookScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<CartProvider>(builder: (context, provider, child) {
+    return Consumer<BorrowedBookProvider>(builder: (context, provider, child) {
       final cartItems = provider.cartList;
       return Scaffold(
           appBar: AppBar(
-            title: Text('Cart'),
-          ),
-          bottomNavigationBar: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Expanded(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'Your Total Order is:',
-                      ),
-                      Text('\$${provider.totalPrice}'),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: FilledButton(
-                    onPressed: () {
-                      if (provider.cartList.isNotEmpty) {
-                        Get.to(() => CheckoutScreen());
-                      } else {
-                        Get.snackbar(
-                            'Warning', 'Cart is empty, please add some items');
-                      }
-                    },
-                    child: Text('Place Order'),
-                  ),
-                ),
-              ],
-            ),
+            title: Text('Độc giả mượn sách'),
           ),
           body: provider.cartList.isEmpty
               ? Center(

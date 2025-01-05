@@ -15,7 +15,6 @@ class DioClient {
     _dio.options.baseUrl = ServiceUrl.baseUrl;
     _dio.options.connectTimeout = Duration(seconds: 5);
     _dio.options.receiveTimeout = Duration(seconds: 5);
-    _dio.options.headers['Content-Type'] = 'application/json';
   }
   factory DioClient() {
     return _instance;
@@ -33,9 +32,10 @@ class DioClient {
     }
   }
 
-  Future<Response> post(String path, dynamic data) async {
+  Future<Response> post(String path, dynamic data, [bool encode = true]) async {
     try {
-      final response = await _dio.post(path, data: jsonEncode(data));
+      final response =
+          await _dio.post(path, data: !encode ? data : jsonEncode(data));
       return response;
     } on DioException catch (e) {
       debugPrint(e.message);

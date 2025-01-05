@@ -1,4 +1,4 @@
-import 'package:bookshop/providers/cart_provider.dart';
+import 'package:bookshop/providers/borrowed_provider.dart';
 import 'package:bookshop/screens/checkout_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -25,43 +25,11 @@ class _BorrowedBookScreenState extends State<BorrowedBookScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<CartProvider>(builder: (context, provider, child) {
+    return Consumer<BorrowedBookProvider>(builder: (context, provider, child) {
       final cartItems = provider.cartList;
       return Scaffold(
           appBar: AppBar(
-            title: Text('Cart'),
-          ),
-          bottomNavigationBar: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Expanded(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'Your Total Order is:',
-                      ),
-                      Text('\$${provider.totalPrice}'),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: FilledButton(
-                    onPressed: () {
-                      if (provider.cartList.isNotEmpty) {
-                        Get.to(() => CheckoutScreen());
-                      } else {
-                        Get.snackbar(
-                            'Warning', 'Cart is empty, please add some items');
-                      }
-                    },
-                    child: Text('Place Order'),
-                  ),
-                ),
-              ],
-            ),
+            title: Text('Sách đã mượn'),
           ),
           body: provider.cartList.isEmpty
               ? Center(

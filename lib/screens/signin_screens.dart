@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/cart_provider.dart';
+import '../providers/borrowed_provider.dart';
 import 'signup_screen.dart';
 
 class SignInScreen extends StatelessWidget {
