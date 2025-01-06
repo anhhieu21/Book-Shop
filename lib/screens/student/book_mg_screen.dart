@@ -1,7 +1,5 @@
 import 'package:bookshop/providers/borrowed_provider.dart';
-import 'package:bookshop/screens/checkout_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class BorrowedBookScreen extends StatefulWidget {

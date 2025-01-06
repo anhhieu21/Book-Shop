@@ -7,14 +7,15 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-class AddBookScreen extends StatefulWidget {
-  const AddBookScreen({super.key});
+class EditBookScreen extends StatefulWidget {
+  final Book book;
+  const EditBookScreen({super.key, required this.book});
 
   @override
-  _AddBookScreenState createState() => _AddBookScreenState();
+  _EditBookScreenState createState() => _EditBookScreenState();
 }
 
-class _AddBookScreenState extends State<AddBookScreen> {
+class _EditBookScreenState extends State<EditBookScreen> {
   final _formKey = GlobalKey<FormState>();
   final _titleController = TextEditingController();
   final _authorController = TextEditingController();
@@ -22,6 +23,15 @@ class _AddBookScreenState extends State<AddBookScreen> {
   final _genreController = TextEditingController();
   Category? _selectedGenre;
   File? _selectedImage;
+  @override
+  void initState() {
+    _titleController.text = widget.book.name;
+    _authorController.text = widget.book.author;
+    _yearController.text = widget.book.yearPubish;
+    _genreController.text = widget.book.categoryId ?? '';
+    super.initState();
+  }
+
   @override
   void dispose() {
     _titleController.dispose();
@@ -35,7 +45,8 @@ class _AddBookScreenState extends State<AddBookScreen> {
     if (_formKey.currentState!.validate()) {
       // Process the data
       final success = await Get.showOverlay<bool>(
-          asyncFunction: () => context.read<BookProvider>().addBook(
+          asyncFunction: () => context.read<BookProvider>().updateBook(
+              id: widget.book.id!,
               name: _titleController.text,
               author: _authorController.text,
               yearPubish: _yearController.text,
@@ -46,12 +57,12 @@ class _AddBookScreenState extends State<AddBookScreen> {
       if (success) {
         Get.snackbar(
           'Thông báo',
-          'Thêm sách thành công!',
+          'Cập nhật sách thành công!',
         );
-        print('Book added successfully!');
+        print('Book updated successfully!');
       } else {
-        Get.snackbar('Lỗi', 'Thêm sách không thành công!');
-        print('Error adding book!');
+        Get.snackbar('Lỗi', 'Cập nhật sách không thành công!');
+        print('Error update book!');
       }
     }
   }
@@ -68,7 +79,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Thêm sách mới'),
+        title: Text('Chỉnh sửa sách'),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -152,7 +163,7 @@ class _AddBookScreenState extends State<AddBookScreen> {
                 SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: _submitForm,
-                  child: Text('Thêm sách'),
+                  child: Text('Cập nhật sách'),
                 ),
               ],
             ),

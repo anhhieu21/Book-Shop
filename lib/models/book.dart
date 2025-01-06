@@ -6,7 +6,7 @@ class Book {
   late String image;
   late double productPrice;
   late String author;
-  String? category;
+  String? categoryId;
   String yearPubish;
   Book({
     required this.id,
@@ -14,7 +14,7 @@ class Book {
     required this.image,
     this.productPrice = 0,
     required this.author,
-    this.category,
+    this.categoryId,
     required this.yearPubish,
   });
 
@@ -26,7 +26,7 @@ class Book {
           ? '${ServiceUrl.baseUrl}/static/images/${json['image']}'
           : 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8Ym9va3xlbnwwfDF8MHx8fDA%3D',
       author: json['author'],
-      category: json['category'],
+      categoryId: json['category'],
       yearPubish: json['yearPubish'],
     );
   }
@@ -36,8 +36,19 @@ class Book {
       'name': name,
       'yearPubish': yearPubish,
       'author': author,
-      'category': category,
+      'category': categoryId,
     };
+  }
+}
+
+class Category {
+  final String id;
+  final String name;
+
+  Category({required this.id, required this.name});
+
+  factory Category.fromJson(Map<String, dynamic> json) {
+    return Category(id: json['id'], name: json['name']);
   }
 }
 

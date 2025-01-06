@@ -16,7 +16,7 @@ class AuthProvider extends ChangeNotifier {
   User? user;
 
   Future<bool> checkAuthState() async {
-    try { 
+    try {
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString('accessToken');
       if (token == null) {
@@ -71,6 +71,9 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<bool> logout() async {
+    final pref = await SharedPreferences.getInstance();
+    pref.remove('accessToken');
+    pref.remove('refreshToken');
     return false;
   }
 }

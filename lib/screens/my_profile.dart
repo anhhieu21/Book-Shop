@@ -1,7 +1,5 @@
 import 'package:bookshop/providers/auth_provider.dart';
-import 'package:bookshop/providers/user_provider.dart';
 import 'package:bookshop/screens/signin_screens.dart';
-import 'package:bookshop/screens/order_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -80,10 +78,6 @@ class MyProfile extends StatelessWidget {
                               ],
                             ),
                           ),
-                          listTile(
-                              onTap: () => Get.to(() => OrderScreen()),
-                              icon: Icons.shopping_bag_outlined,
-                              title: "My Orders"),
                           listTile(
                               icon: Icons.policy_outlined,
                               title: "Privacy Policy"),

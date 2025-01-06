@@ -1,7 +1,7 @@
 import 'package:bookshop/models/book.dart';
-import 'package:bookshop/providers/borrowed_provider.dart';
 import 'package:bookshop/providers/book_provider.dart';
 import 'package:bookshop/screens/details_book.dart';
+import 'package:bookshop/screens/search_screen.dart';
 import 'package:bookshop/screens/student/book_mg_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,7 +17,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
-    context.read<BookProvider>().getBooks();
+    context.read<BookProvider>()
+      ..getBooks()
+      ..getCategories();
     super.initState();
   }
 
@@ -38,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 17),
                 child: IconButton(
                   onPressed: () {
-                    Get.to(() => BorrowedBookScreen());
+                    Get.to(() => SearchScreen());
                   },
                   icon: Icon(Icons.search),
                 ),
@@ -50,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
               SliverPadding(
                 padding: const EdgeInsets.all(16.0),
                 sliver: SliverAppBar(
-                  expandedHeight: 220,
+                  expandedHeight: 180,
                   flexibleSpace: FlexibleSpaceBar(
                     background: Stack(
                       alignment: Alignment.center,
@@ -162,9 +164,9 @@ class ItemBook extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                   color: Colors.black),
             ),
-            Text("Price: ${product.productPrice}\$",
+            Text("author: ${product.author}\$",
                 style:
-                    TextStyle(fontWeight: FontWeight.bold, color: Colors.red)),
+                    TextStyle(fontWeight: FontWeight.bold, color: Colors.blue)),
             SizedBox(height: 16),
           ],
         ),

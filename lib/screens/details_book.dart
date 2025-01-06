@@ -1,7 +1,7 @@
 import 'package:bookshop/models/book.dart';
 import 'package:bookshop/providers/auth_provider.dart';
-import 'package:bookshop/providers/borrowed_provider.dart';
-import 'package:bookshop/screens/student/book_mg_screen.dart';
+import 'package:bookshop/providers/book_provider.dart';
+import 'package:bookshop/screens/admin/edit_book_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -12,7 +12,8 @@ class DetailBook extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<BorrowedBookProvider>(builder: (context, provider, child) {
+    return Consumer<BookProvider>(builder: (context, provider, child) {
+      final detail = provider.detailBook ?? book;
       return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(),
@@ -27,7 +28,7 @@ class DetailBook extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(15),
                     child: Image.network(
-                      book.image,
+                      detail.image,
                       height: context.height * 0.5,
                       fit: BoxFit.contain,
                     ),
@@ -37,7 +38,7 @@ class DetailBook extends StatelessWidget {
                   height: 20,
                 ),
                 Text(
-                  book.name,
+                  detail.name,
                   style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -49,10 +50,13 @@ class DetailBook extends StatelessWidget {
                 Text('Description: ',
                     style: TextStyle(fontWeight: FontWeight.w600)),
                 Text(
-                  book.author,
+                  detail.author,
                 ),
                 Text(
-                  'Category: ${book.category}',
+                  'Category: ${context.read<BookProvider>().categoryList.firstWhere(
+                        (e) => e.id == detail.categoryId,
+                        orElse: () => Category(id: 'id', name: 'N/A'),
+                      ).name}',
                   style: TextStyle(fontWeight: FontWeight.w600),
                 )
               ],
@@ -67,12 +71,26 @@ class DetailBook extends StatelessWidget {
               children: provider.user?.role == 'admin'
                   ? [
                       OutlinedButton.icon(
-                        onPressed: () {},
+                        onPressed: () {
+                          Get.to(() => EditBookScreen(book: detail));
+                        },
                         icon: Icon(Icons.edit_document),
                         label: Text('Chỉnh sửa'),
                       ),
                       OutlinedButton.icon(
-                        onPressed: () {},
+                        onPressed: () async {
+                          final success = await context
+                              .read<BookProvider>()
+                              .deleteBook(detail.id!);
+                          if (success) {
+                            Get.back();
+                            Get.snackbar(
+                                "Thành công", "Đã xóa sách ra khỏi thư viện");
+                          } else {
+                            Get.snackbar("Thất bại",
+                                "Không thể xóa sách ra khỏi thư viện");
+                          }
+                        },
                         icon: Icon(Icons.delete_forever),
                         label: Text('Xóa sách'),
                       ),

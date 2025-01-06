@@ -1,33 +1,40 @@
-import 'package:bookshop/models/book.dart';
+import 'package:bookshop/providers/book_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CategoriesWidget extends StatelessWidget {
   const CategoriesWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return GridView.count(
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      crossAxisCount: 3,
-      crossAxisSpacing: 8,
-      mainAxisSpacing: 8,
-      childAspectRatio: 1.5,
-      children: List.generate(
-        CategoryEnum.values.length,
-        (index) {
-          return SizedBox(
-            child: Card.outlined(
-              child: Center(
-                child: Text(
-                  CategoryEnum.values[index].title,
-                  textAlign: TextAlign.center,
-                ),
+    return Consumer<BookProvider>(builder: (context, provider, child) {
+      final categories = provider.categoryList;
+      return categories.isEmpty
+          ? Center(
+              child: Text('Chưa có thể loại nào'),
+            )
+          : GridView.count(
+              scrollDirection: Axis.horizontal,
+              crossAxisCount: 2,
+              crossAxisSpacing: 6,
+              mainAxisSpacing: 6,
+              childAspectRatio: 0.3,
+              children: List.generate(
+                categories.length,
+                (index) {
+                  return SizedBox(
+                    child: Card.outlined(
+                      child: Center(
+                        child: Text(
+                          categories[index].name,
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                  );
+                },
               ),
-            ),
-          );
-        },
-      ),
-    );
+            );
+    });
   }
 }
