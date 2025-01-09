@@ -20,6 +20,7 @@ class AuthProvider extends ChangeNotifier {
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString('accessToken');
       if (token == null) {
+        Get.offAll(() => SignInScreen());
         return false;
       }
       dioClient.setToken(token);
