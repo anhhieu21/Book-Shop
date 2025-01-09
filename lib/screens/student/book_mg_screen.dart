@@ -1,5 +1,7 @@
-import 'package:bookshop/providers/borrowed_provider.dart';
+import 'package:bookshop/providers/auth_provider.dart';
+import 'package:bookshop/providers/book_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class BorrowedBookScreen extends StatefulWidget {
@@ -18,25 +20,30 @@ class _BorrowedBookScreenState extends State<BorrowedBookScreen> {
 
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      context
+          .read<BookProvider>()
+          .getBorrowedBooks(context.read<AuthProvider>().user!.id);
+    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<BorrowedBookProvider>(builder: (context, provider, child) {
-      final cartItems = provider.cartList;
+    return Consumer<BookProvider>(builder: (context, provider, child) {
+      final borrows = provider.borrowedBookList;
       return Scaffold(
           appBar: AppBar(
             title: Text('Sách đã mượn'),
           ),
-          body: provider.cartList.isEmpty
+          body: borrows.isEmpty
               ? Center(
                   child: Text("No data"),
                 )
               : Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ListView.builder(
-                    itemCount: provider.cartList.length,
+                    itemCount: borrows.length,
                     itemBuilder: (context, index) {
                       return Card(
                         child: Column(
@@ -46,15 +53,17 @@ class _BorrowedBookScreenState extends State<BorrowedBookScreen> {
                                   horizontal: 10, vertical: 3),
                               child: Row(
                                 children: [
-                                  Expanded(
-                                    child: SizedBox(
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Image.network(
+                                      borrows[index].book!.image,
                                       height: 90,
-                                      child: Center(
-                                        child: Image.network(
-                                          cartItems[index].cartImage,
-                                        ),
-                                      ),
+                                      width: 90,
+                                      fit: BoxFit.cover,
                                     ),
+                                  ),
+                                  const SizedBox(
+                                    width: 4,
                                   ),
                                   Expanded(
                                     child: SizedBox(
@@ -68,7 +77,7 @@ class _BorrowedBookScreenState extends State<BorrowedBookScreen> {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                cartItems[index].cartName,
+                                                borrows[index].book!.name,
                                                 maxLines: 2,
                                                 style: TextStyle(
                                                     color: Colors.black,
@@ -76,46 +85,33 @@ class _BorrowedBookScreenState extends State<BorrowedBookScreen> {
                                                     fontSize: 14),
                                               ),
                                               Text(
-                                                '${cartItems[index].totalPrice}\$',
-                                                style: TextStyle(
-                                                    color: Colors.green,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                              Text(
-                                                'Quantity: ${cartItems[index].cartQuantity}',
+                                                borrows[index].book!.author,
+                                                maxLines: 2,
                                                 style: TextStyle(
                                                     color: Colors.black,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              )
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 14),
+                                              ),
+                                              Text(
+                                                'Hạn trả: ${DateFormat('dd/MM/yyyy').format(borrows[index].returnDate)}',
+                                                maxLines: 2,
+                                              ),
                                             ],
                                           ),
                                         ],
                                       ),
                                     ),
                                   ),
-                                  Expanded(
-                                    child: Container(
-                                      height: 90,
-                                      padding: EdgeInsets.only(right: 10),
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(top: 8),
-                                        child: InkWell(
-                                          onTap: () async {
-                                            await provider.removeCartItem(
-                                                cartId:
-                                                    cartItems[index].cartId);
-                                          },
-                                          child: Icon(
-                                            Icons.delete,
-                                            size: 30,
-                                            color: Colors.black54,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
+                                  FilledButton.tonalIcon(
+                                      onPressed:() async{
+                                        context
+                                            .read<BookProvider>()
+                                            .returnBook(borrows[index]);
+                                      } ,
+                                      label: Text("Trả"),
+                                      icon: Icon(
+                                        Icons.library_add_check_rounded,
+                                      ))
                                 ],
                               ),
                             ),

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:bookshop/service/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:bookshop/models/book.dart';
 import 'dart:convert';
@@ -12,6 +13,7 @@ class BookProvider extends ChangeNotifier {
   List<Book> bookList = [];
   List<Book> bookListSearch = [];
   List<Category> categoryList = [];
+  List<BorrowBook> borrowedBookList = [];
   Book? detailBook;
   final _bookService = BookService();
   Future getBooks() async {
@@ -132,5 +134,57 @@ class BookProvider extends ChangeNotifier {
       return;
     }
     Get.snackbar('Thất bại', 'Không thể cập nhật loại sách');
+  }
+
+  Future<bool> borrowBook(
+      {required String bookId,
+      required String userId,
+      required DateTime borrowDate,
+      required DateTime returnDate}) async {
+    final success = await _bookService.borrowBook(
+        bookId: bookId,
+        userId: userId,
+        borrowDate: borrowDate,
+        returnDate: returnDate);
+    if (success) {
+      Get.snackbar('Thành công', 'Mượn sách thành công');
+      await getBorrowedBooks(userId);
+      return success;
+    }
+    Get.snackbar('Thất bại', 'Không thể mượn sách');
+    return false;
+  }
+
+  Future<bool> returnBook(BorrowBook borrow) async {
+    final success = await _bookService.returnBook(borrow.id);
+    if (success) {
+      Get.snackbar('Thành công', 'Trả sách thành công');
+      await getBorrowedBooks(borrow.userId);
+      return success;
+    }
+    Get.snackbar('Thất bại', 'Không thể trả sách');
+    return false;
+  }
+
+  Future<void> getBorrowedBooks(String userId) async {
+    final res = await _bookService.getBorrowBook(userId);
+    borrowedBookList = res.where((e) => e.isReturn == false).toList();
+    for (var borrow in borrowedBookList) {
+      final book = await getBookFromId(borrow.bookId);
+      borrow.book = book;
+    }
+    notifyListeners();
+  }
+
+  Future<void> adminGetBorrowedBooks() async {
+    final res = await _bookService.getBorrowBook(null);
+    borrowedBookList = res;
+    for (var borrow in borrowedBookList) {
+      final book = await getBookFromId(borrow.bookId);
+      borrow.book = book;
+      final user = await UserService().getUserById(borrow.userId);
+      borrow.user = user;
+    }
+    notifyListeners();
   }
 }

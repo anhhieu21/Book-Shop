@@ -1,9 +1,9 @@
+import 'package:bookshop/providers/book_provider.dart';
 import 'package:bookshop/screens/admin/book_lent_screen.dart';
 import 'package:bookshop/screens/my_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/borrowed_provider.dart';
 import 'admin_home_screen.dart';
 
 class AdminMainScreens extends StatefulWidget {
@@ -36,15 +36,19 @@ class _AdminMainScreensState extends State<AdminMainScreens> {
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _currentIndex,
-        onDestinationSelected: (value) => setState(() => _currentIndex = value),
+        onDestinationSelected: (value) {
+          if (value == 1) {
+            context.read<BookProvider>().adminGetBorrowedBooks();
+          }
+          setState(() => _currentIndex = value);
+        },
         destinations: [
           NavigationDestination(
               icon: Icon(Icons.book_rounded), label: "Trang chủ"),
           NavigationDestination(
-              icon: Consumer<BorrowedBookProvider>(
-                  builder: (context, provider, child) {
+              icon: Consumer<BookProvider>(builder: (context, provider, child) {
                 return Badge.count(
-                  count: provider.cartList.length,
+                  count: provider.borrowedBookList.length,
                   child: Icon(Icons.library_books_rounded),
                 );
               }),

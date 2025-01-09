@@ -4,6 +4,7 @@ import 'package:bookshop/screens/admin/add_book_screen.dart';
 import 'package:bookshop/screens/admin/category_screen.dart';
 import 'package:bookshop/screens/admin/widgets/books_widget.dart';
 import 'package:bookshop/screens/details_book.dart';
+import 'package:bookshop/screens/search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -70,6 +71,17 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
               'Book Library Admin',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
+            actions: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 17),
+                child: IconButton(
+                  onPressed: () {
+                    Get.to(() => SearchScreen());
+                  },
+                  icon: Icon(Icons.search),
+                ),
+              ),
+            ],
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: () {

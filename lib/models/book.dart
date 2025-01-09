@@ -1,3 +1,4 @@
+import 'package:bookshop/models/user_model.dart';
 import 'package:bookshop/service/service_url.dart';
 
 class Book {
@@ -64,4 +65,34 @@ enum CategoryEnum {
   const CategoryEnum(this.title);
 
   getTitle(String cate) {}
+}
+
+class BorrowBook {
+  String id;
+  String userId;
+  String bookId;
+  DateTime borrowDate;
+  DateTime returnDate;
+  bool isReturn;
+  Book? book;
+  User? user;
+  BorrowBook({
+    required this.id,
+    required this.userId,
+    required this.bookId,
+    required this.borrowDate,
+    required this.returnDate,
+    required this.isReturn,
+  });
+
+  factory BorrowBook.fromJson(Map<String, dynamic> json) {
+    return BorrowBook(
+      id: json['id'],
+      userId: json['userId'],
+      bookId: json['bookId'],
+      borrowDate: DateTime.parse(json['borrowDate']),
+      returnDate: DateTime.parse(json['returnDate']),
+      isReturn: json['isReturn'],
+    );
+  }
 }

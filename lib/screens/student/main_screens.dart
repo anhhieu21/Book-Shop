@@ -1,9 +1,9 @@
+import 'package:bookshop/providers/book_provider.dart';
 import 'package:bookshop/screens/student/book_mg_screen.dart';
 import 'package:bookshop/screens/my_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/borrowed_provider.dart';
 import 'home_screen.dart';
 
 class MainScreens extends StatefulWidget {
@@ -40,10 +40,9 @@ class _MainScreensState extends State<MainScreens> {
         destinations: [
           NavigationDestination(icon: Icon(Icons.menu_book), label: "Thư viện"),
           NavigationDestination(
-              icon: Consumer<BorrowedBookProvider>(
-                  builder: (context, provider, child) {
+              icon: Consumer<BookProvider>(builder: (context, provider, child) {
                 return Badge.count(
-                  count: provider.cartList.length,
+                  count: provider.borrowedBookList.length,
                   child: Icon(Icons.bookmark),
                 );
               }),

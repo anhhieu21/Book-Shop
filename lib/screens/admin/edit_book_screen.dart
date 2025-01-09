@@ -141,7 +141,9 @@ class _EditBookScreenState extends State<EditBookScreen> {
                       builder: (context, provider, child) {
                     return DropdownButtonHideUnderline(
                         child: DropdownButton<Category>(
-                      value: _selectedGenre,
+                      value: provider.categoryList.firstWhereOrNull((element) =>
+                              element.id == widget.book.categoryId) ??
+                          _selectedGenre,
                       padding: EdgeInsets.symmetric(horizontal: 8),
                       hint: Text('Thể loại'),
                       borderRadius: BorderRadius.circular(8),

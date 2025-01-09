@@ -80,23 +80,23 @@ class MyProfile extends StatelessWidget {
                           ),
                           listTile(
                               icon: Icons.policy_outlined,
-                              title: "Privacy Policy"),
-                          listTile(icon: Icons.add_chart, title: "About"),
+                              title: "Chính sách bảo mật"),
+                          listTile(icon: Icons.add_chart, title: "Thêm"),
                           listTile(
                               icon: Icons.exit_to_app_outlined,
                               onTap: () {
                                 showDialog(
                                     context: context,
                                     builder: (_) => AlertDialog(
-                                          title: Text("Logout"),
+                                          title: Text("Đăng xuất"),
                                           content: Text(
-                                              "Are you sure you want to log out?"),
+                                              "Bạn có chắc chắn muốn đăng xuất ?"),
                                           actions: [
                                             TextButton(
                                               onPressed: () {
                                                 Navigator.pop(context);
                                               },
-                                              child: Text("Cancel"),
+                                              child: Text("Hủy"),
                                             ),
                                             TextButton(
                                               onPressed: () {
@@ -108,12 +108,12 @@ class MyProfile extends StatelessWidget {
                                                       () => SignInScreen());
                                                 });
                                               },
-                                              child: Text("Yes"),
+                                              child: Text("Đồng ý"),
                                             ),
                                           ],
                                         ));
                               },
-                              title: "Log Out"),
+                              title: "Đăng xuất"),
                         ],
                       ),
                     ),

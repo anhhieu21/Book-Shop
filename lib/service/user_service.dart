@@ -22,7 +22,17 @@ class UserService {
     }
   }
 
-  Future<bool>   login(String email, String password) async {
+  Future<User?> getUserById(String id) async {
+    try {
+      final res = await dioClient.get('${ServiceUrl.userInfo}/$id');
+      return User.fromJson(res.data);
+    } on Exception catch (e) {
+      debugPrint(e.toString());
+      return null;
+    }
+  }
+
+  Future<bool> login(String email, String password) async {
     try {
       final data = {
         'email': email,

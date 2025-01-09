@@ -41,6 +41,7 @@ dependencies:
   ndialog: ^4.1.1
   dio: ^5.7.0
   shared_preferences: ^2.3.5
+  intl: ^0.20.1
 
 dev_dependencies:
   flutter_test:

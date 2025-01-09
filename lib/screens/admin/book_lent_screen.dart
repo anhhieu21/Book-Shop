@@ -1,5 +1,6 @@
-import 'package:bookshop/providers/borrowed_provider.dart';
+import 'package:bookshop/providers/book_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class BookLentScreen extends StatefulWidget {
@@ -18,114 +19,181 @@ class _BookLentScreenState extends State<BookLentScreen> {
 
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      context.read<BookProvider>().adminGetBorrowedBooks();
+    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<BorrowedBookProvider>(builder: (context, provider, child) {
-      final cartItems = provider.cartList;
-      return Scaffold(
-          appBar: AppBar(
-            title: Text('Độc giả mượn sách'),
-          ),
-          body: provider.cartList.isEmpty
-              ? Center(
-                  child: Text("No data"),
-                )
-              : Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ListView.builder(
-                    itemCount: provider.cartList.length,
-                    itemBuilder: (context, index) {
-                      return Card(
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 3),
-                              child: Row(
+    return Consumer<BookProvider>(builder: (context, provider, child) {
+      final borrows =
+          provider.borrowedBookList.where((e) => e.isReturn == false).toList();
+      final returns =
+          provider.borrowedBookList.where((e) => e.isReturn == true).toList();
+      return DefaultTabController(
+        length: 2,
+        child: Scaffold(
+            appBar: AppBar(
+              title: Text('Độc giả mượn sách'),
+              bottom: PreferredSize(
+                preferredSize: Size.fromHeight(50),
+                child: TabBar(
+                  tabs: [
+                    Tab(text: 'Đang mượn'),
+                    Tab(text: 'Đã trả'),
+                  ],
+                ),
+              ),
+            ),
+            body: borrows.isEmpty
+                ? Center(
+                    child: Text("No data"),
+                  )
+                : Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: RefreshIndicator(
+                      onRefresh: () async {
+                        context.read<BookProvider>().adminGetBorrowedBooks();
+                      },
+                      child: TabBarView(children: [
+                        ListView.builder(
+                          itemCount: borrows.length,
+                          itemBuilder: (context, index) {
+                            return Card(
+                              child: Column(
                                 children: [
-                                  Expanded(
-                                    child: SizedBox(
-                                      height: 90,
-                                      child: Center(
-                                        child: Image.network(
-                                          cartItems[index].cartImage,
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 5),
+                                    child: Row(
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  'Người mượn sách: ${borrows[index].user!.name}',
+                                                  maxLines: 2,
+                                                  style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 14),
+                                                ),
+                                                Text(
+                                                  borrows[index].book!.name,
+                                                  maxLines: 2,
+                                                  style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 14),
+                                                ),
+                                                Text(
+                                                  borrows[index].book!.author,
+                                                  maxLines: 2,
+                                                  style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 14),
+                                                ),
+                                                Text(
+                                                  'Ngày mượn: ${DateFormat('dd/MM/yyyy').format(borrows[index].borrowDate)}',
+                                                  maxLines: 2,
+                                                ),
+                                                Text(
+                                                  'Hạn trả: ${DateFormat('dd/MM/yyyy').format(borrows[index].returnDate)}',
+                                                  maxLines: 2,
+                                                ),
+                                              ],
+                                            ),
+                                          ],
                                         ),
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: SizedBox(
-                                      height: 90,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                cartItems[index].cartName,
-                                                maxLines: 2,
-                                                style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 14),
-                                              ),
-                                              Text(
-                                                '${cartItems[index].totalPrice}\$',
-                                                style: TextStyle(
-                                                    color: Colors.green,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                              Text(
-                                                'Quantity: ${cartItems[index].cartQuantity}',
-                                                style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              )
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Container(
-                                      height: 90,
-                                      padding: EdgeInsets.only(right: 10),
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(top: 8),
-                                        child: InkWell(
-                                          onTap: () async {
-                                            await provider.removeCartItem(
-                                                cartId:
-                                                    cartItems[index].cartId);
-                                          },
-                                          child: Icon(
-                                            Icons.delete,
-                                            size: 30,
-                                            color: Colors.black54,
-                                          ),
-                                        ),
-                                      ),
+                                      ],
                                     ),
                                   ),
                                 ],
                               ),
-                            ),
-                            Container()
-                          ],
+                            );
+                          },
                         ),
-                      );
-                    },
-                  ),
-                ));
+                        ListView.builder(
+                          itemCount: returns.length,
+                          itemBuilder: (context, index) {
+                            return Card(
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 5),
+                                    child: Row(
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  'Người mượn sách: ${returns[index].user!.name}',
+                                                  maxLines: 2,
+                                                  style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 14),
+                                                ),
+                                                Text(
+                                                  returns[index].book!.name,
+                                                  maxLines: 2,
+                                                  style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 14),
+                                                ),
+                                                Text(
+                                                  returns[index].book!.author,
+                                                  maxLines: 2,
+                                                  style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 14),
+                                                ),
+                                                Text(
+                                                  'Ngày mượn: ${DateFormat('dd/MM/yyyy').format(returns[index].borrowDate)}',
+                                                  maxLines: 2,
+                                                ),
+                                                Text(
+                                                  'Hạn trả: ${DateFormat('dd/MM/yyyy').format(returns[index].returnDate)}',
+                                                  maxLines: 2,
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      ]),
+                    ),
+                  )),
+      );
     });
   }
 }

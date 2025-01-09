@@ -157,4 +157,62 @@ class BookService {
       return false;
     }
   }
+
+  Future<bool> borrowBook(
+      {required String bookId,
+      required String userId,
+      required DateTime borrowDate,
+      required DateTime returnDate}) async {
+    try {
+      final response = await dioClient.post(ServiceUrl.borrowBook, {
+        'bookId': bookId,
+        'userId': userId,
+        'borrowDate': borrowDate.toString(),
+        'returnDate': returnDate.toString(),
+      });
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        print(json.encode(response.data));
+      } else {
+        print(response.statusMessage);
+      }
+      return true;
+    } on Exception catch (e) {
+      print(e.toString());
+      return false;
+    }
+  }
+
+  Future<bool> returnBook(String id) async {
+    try {
+      final response = await dioClient.put('${ServiceUrl.returnBook}/$id', {});
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        print(json.encode(response.data));
+      } else {
+        print(response.statusMessage);
+      }
+      return true;
+    } on Exception catch (e) {
+      print(e.toString());
+      return false;
+    }
+  }
+
+  Future<List<BorrowBook>> getBorrowBook(String? id) async {
+    try {
+      final response = await dioClient.get(id == null
+          ? ServiceUrl.addminGetBorrow
+          : '${ServiceUrl.getBorrow}/$id');
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return (response.data as List)
+            .map((e) => BorrowBook.fromJson(e))
+            .toList();
+      } else {
+        print(response.statusMessage);
+      }
+      return [];
+    } on Exception catch (e) {
+      print(e.toString());
+      return [];
+    }
+  }
 }

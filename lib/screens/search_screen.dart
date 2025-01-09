@@ -15,6 +15,21 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   Category? _categorySelected;
   ScrollController? controller = ScrollController();
+  final textController = TextEditingController();
+
+  @override
+  void dispose() {
+    textController.dispose();
+    controller?.dispose();
+    super.dispose();
+  }
+
+  @override
+  void deactivate() {
+    context.read<BookProvider>().bookListSearch.clear();
+    super.deactivate();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<BookProvider>(builder: (context, provider, child) {
@@ -23,11 +38,22 @@ class _SearchScreenState extends State<SearchScreen> {
           title: SizedBox(
             height: 45,
             child: TextField(
+              controller: textController,
+              onSubmitted: (text) {
+                context
+                    .read<BookProvider>()
+                    .searchBook(value: text, category: _categorySelected?.id);
+              },
               decoration: InputDecoration(
                   hintText: 'Nhập tên sách, hoặc tác giả',
                   contentPadding: EdgeInsets.only(left: 8.0),
-                  suffixIcon:
-                      IconButton(onPressed: () {}, icon: Icon(Icons.search))),
+                  suffixIcon: IconButton(
+                      onPressed: () {
+                        context.read<BookProvider>().searchBook(
+                            value: textController.text,
+                            category: _categorySelected?.id);
+                      },
+                      icon: Icon(Icons.search))),
             ),
           ),
         ),
@@ -50,6 +76,9 @@ class _SearchScreenState extends State<SearchScreen> {
                                 if (value) {
                                   _categorySelected = e;
                                   setState(() {});
+                                  context.read<BookProvider>().searchBook(
+                                      value: textController.text,
+                                      category: _categorySelected?.id);
                                 }
                               },
                             ),
@@ -59,7 +88,7 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
               ListView(
                 shrinkWrap: true,
-                children: provider.bookList
+                children: provider.bookListSearch
                     .map((e) => GestureDetector(
                           onTap: () => Get.to(() => DetailBook(e)),
                           child: Card.filled(

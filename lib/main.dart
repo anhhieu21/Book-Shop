@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-import 'providers/borrowed_provider.dart';
 import 'providers/book_provider.dart';
 import 'providers/user_provider.dart';
 
@@ -15,7 +14,6 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
-        ChangeNotifierProvider(create: (_) => BorrowedBookProvider()),
         ChangeNotifierProvider(create: (_) => BookProvider()),
       ],
       child: Home(),
